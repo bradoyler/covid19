@@ -1,8 +1,8 @@
 <template>
   <div id="app">
   <div class="header">
-    <h3 class="header-title">COVID-19 Confirmed cases (per capita, US)<br>
-       <small> confirmed cases: {{totalCases}} </small><br>
+    <h3 class="header-title">COVID-19 Confirmed cases (per capita)<br>
+       <small>Confirmed cases (U.S.): {{totalCases}} </small><br>
        <small style="font-size: x-small">updated: {{reportDate}}</small>
     </h3>
   </div>
@@ -83,11 +83,12 @@ export default {
 }
 
 .header-title {
-    border-radius: 10px;
-    background-color: black;
-    margin: auto;
-    max-width: 420px;
-    padding: 6px;
-    color: antiquewhite;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  background-color: black;
+  margin: auto;
+  max-width: 420px;
+  padding: 6px;
+  color: antiquewhite;
 }
 </style>
