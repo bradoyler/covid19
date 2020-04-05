@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="">
     <div id='map'></div>
   </div>
 </template>
@@ -9,22 +9,18 @@
 import * as turf from '@turf/turf'
 
 export default {
-  name: 'Map',
-  props: ['coords', 'reports'],
-  data: function () {
-    return {
-      reportDate: '4/2/20'
-    }
-  },
+  name: 'MainMap',
+  props: ['coords', 'reports', 'reportDate'],
   methods: {
     setLocation: function (map, coords) {
-      new mapboxgl.Marker()
-        .setLngLat(coords) // [-74.8477705, 40.2470771]
-        .addTo(map)
+      new mapboxgl.Marker().setLngLat(coords).addTo(map)
     },
     buildGeoJson: function () {
-      return turf.featureCollection(this.reports.map(r => {
-        const cases = Math.round(Number(r[this.reportDate]))
+      const data = this.reports
+      console.log('buildJson:', data.length, this.reportDate, data[9])
+      const reportDate = this.reportDate
+      return turf.featureCollection(data.map(r => {
+        const cases = Math.round(Number(r[reportDate]))
         const properties = { cases, FIPS: r.FIPS, pop: 0, rate: 0 }
         if (r.pop) {
           const rate = Math.round(cases / (r.pop / 10000))
@@ -93,7 +89,7 @@ export default {
       zoom: 3.5
     })
 
-    window.map = map // export to window
+    // window.map = map // export to window
     const that = this
     map.on('load', function () {
       that.addLayer(map, that.buildGeoJson())

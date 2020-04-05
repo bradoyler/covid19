@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <MainMap v-if="reports.length" :coords="coords" :reports="reports"></MainMap>
+    <MainMap v-if="reports.length" :reportDate="reportDate" :coords="coords" :reports="reports"></MainMap>
   </div>
 </template>
 
 <script>
 import { csvParse } from 'd3-dsv'
 import MainMap from './components/MainMap.vue'
+const dataVersion = '4.4'
+const reportDate = '4/4/20'
 
 export default {
   name: 'App',
@@ -14,12 +16,11 @@ export default {
     MainMap
   },
   mounted () {
-    console.log('appppp')
     this.loadData()
   },
   methods: {
     loadData: function () {
-      Promise.all(['cases-us.csv', 'counties.csv'].map(url => {
+      Promise.all([`cases-us-${dataVersion}.csv`, 'counties.csv'].map(url => {
         return fetch(url).then(response => {
           return response.ok ? response.text() : Promise.reject(response.status)
         }).then(text => csvParse(text))
@@ -31,18 +32,18 @@ export default {
           const county = counties.find(c => fips === +`${c.STATE}${c.COUNTY}`)
           if (county) {
             r.pop = Number(county.POPESTIMATE2019)
-          } else {
-            console.log('no match:', r.Admin2, r.FIPS)
           }
           return r
         })
+        console.log('>>>', this.reports.length)
       })
     }
   },
   data: function () {
     return {
+      reportDate: reportDate,
       location: '',
-      coords: 'aaa',
+      coords: '', // [-74.8477705, 40.2470771]
       counties: [],
       reports: []
     }

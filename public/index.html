@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.css">
-    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css" rel='stylesheet' />
-    <style>
-      .mapboxgl-popup {
-        color: black;
-        max-width: 400px;
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-      }
-      .text-xs { font-size: x-small; }
-      .list-slim { padding-left: 5px; padding-right: 5px; padding-bottom: 6px; }
-      #map { position:fixed; top:0; bottom:0; width:100%;}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="COVID19 confirmed cases, per capita">
+  <meta property="og:url" content="<%= BASE_URL %>map.png"/>
+  <meta property="og:title" content="COVID19 confirmed cases"/>
+  <meta property="og:description" content="COVID19 confirmed cases, per capita"/>
+  <meta property="og:image" content="<%= BASE_URL %>map.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:site" content="@thenewsdivide"/>
+  <meta name="twitter:title" content="COVID19 confirmed cases"/>
+  <meta name="twitter:description" content="COVID19 confirmed cases, per capita"/>
+  <meta name="twitter:creator" content="@thenewsdivide"/>
+  <meta name="twitter:domain" content="covid.thenewsdivide.com"/>
+  <meta name="twitter:image" content="<%= BASE_URL %>map.png"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.11.1/tachyons.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <!-- <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.css">-->
+  <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.0/mapbox-gl.css" rel='stylesheet' />
+  <style>
+    .mapboxgl-popup {
+      color: black;
+      max-width: 400px;
+      font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+    .text-xs { font-size: x-small; }
+    .list-slim { padding-left: 5px; padding-right: 5px; padding-bottom: 6px; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
   </style>
-
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <script>
-      window.mapbox_token = 'pk.eyJ1IjoiYnJhZG95bGVyIiwiYSI6ImNqN2J6dmJvMTB6MzAycW85dDZtMzNqYWIifQ.-vEpoZZYHFSc46ey_76Z_Q'
-      </script>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+  <title>COVID19 confirmed cases, per capita</title>
+</head>
+<body>
+  <script>
+    window.mapbox_token = 'pk.eyJ1IjoiYnJhZG95bGVyIiwiYSI6ImNqN2J6dmJvMTB6MzAycW85dDZtMzNqYWIifQ.-vEpoZZYHFSc46ey_76Z_Q'
+  </script>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
 </html>
