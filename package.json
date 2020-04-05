@@ -7,7 +7,10 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "publish": " cd dist && s3-upload",
-    "deploy": "s3-deploy './dist/**' --cwd './dist/' --region us-east-1 --bucket covid.thenewsdivide.com"
+    "deploy": "npm run deploy:assets && npm run deploy:index",
+    "deploy:assets": "s3-deploy './dist/**/*.{js,css,png,svg,csv}' --cwd './dist/' --region us-east-1 --bucket covid.thenewsdivide.com --gzip js,css,svg,txt,csv --cache 31556952 --preventUpdates",
+    "deploy:index": "s3-deploy './dist/index.html' --cwd './dist/' --region us-east-1 --bucket covid.thenewsdivide.com --noCache"
+
   },
   "dependencies": {
     "@turf/turf": "^5.1.6",

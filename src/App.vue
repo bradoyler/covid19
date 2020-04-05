@@ -13,7 +13,7 @@
 <script>
 import { csvParse } from 'd3-dsv'
 import MainMap from './components/MainMap.vue'
-const dataVersion = '4.4'
+const dataVersion = '4.4.1'
 const reportDate = '4/4/20'
 
 export default {
@@ -56,7 +56,7 @@ export default {
       totalCases: 0,
       reportDate: reportDate,
       location: '',
-      coords: '', // [-74.8477705, 40.2470771]
+      coords: '', // [-74.8477, 40.247]
       counties: [],
       reports: []
     }
