@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+  <div class="header">
+    <h3 class="header-title">COVID-19 Confirmed cases (per capita) <br>
+      <small>last update: 4/4/20</small>
+    </h3>
+  </div>
     <MainMap v-if="reports.length" :reportDate="reportDate" :coords="coords" :reports="reports"></MainMap>
   </div>
 </template>
@@ -59,5 +64,22 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.header {
+  position: fixed;
+  top: 8px;
+  z-index: 9999;
+  text-align: center;
+  width: 100%;
+}
+
+.header-title {
+    border-radius: 10px;
+    background-color: black;
+    margin: auto;
+    max-width: 420px;
+    padding: 6px;
+    color: antiquewhite;
 }
 </style>
