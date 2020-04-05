@@ -1,8 +1,9 @@
 <template>
   <div id="app">
   <div class="header">
-    <h3 class="header-title">COVID-19 Confirmed cases (per capita) <br>
-      <small>last update: 4/4/20</small>
+    <h3 class="header-title">COVID-19 Confirmed cases (per capita, US)<br>
+       <small> confirmed cases: {{totalCases}} </small><br>
+       <small style="font-size: x-small">updated: {{reportDate}}</small>
     </h3>
   </div>
     <MainMap v-if="reports.length" :reportDate="reportDate" :coords="coords" :reports="reports"></MainMap>
@@ -24,6 +25,10 @@ export default {
     this.loadData()
   },
   methods: {
+    getTotalCases: function () {
+      const reportCases = this.reports.map(r => r[this.reportDate])
+      return reportCases.reduce((acc, curr) => Number(acc) + Number(curr))
+    },
     loadData: function () {
       Promise.all([`cases-us-${dataVersion}.csv`, 'counties.csv'].map(url => {
         return fetch(url).then(response => {
@@ -41,11 +46,14 @@ export default {
           return r
         })
         console.log('>>>', this.reports.length)
+        this.totalCases = this.getTotalCases()
       })
     }
   },
   data: function () {
     return {
+      recovered: 0,
+      totalCases: 0,
       reportDate: reportDate,
       location: '',
       coords: '', // [-74.8477705, 40.2470771]

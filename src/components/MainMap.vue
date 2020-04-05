@@ -21,12 +21,15 @@ export default {
       const reportDate = this.reportDate
       return turf.featureCollection(data.map(r => {
         const cases = Math.round(Number(r[reportDate]))
-        const properties = { cases, FIPS: r.FIPS, pop: 0, rate: 0 }
+        const properties = { cases, FIPS: r.FIPS, pop: 0, rate: 0, percentage: 0 }
         if (r.pop) {
           const rate = Math.round(cases / (r.pop / 10000))
+          const percentage = ((cases / r.pop) * 100).toFixed(1)
           properties.html = `<strong>${r.Admin2}, ${r.Province_State}</strong>
-                             <p>Population: ${r.pop}, Cases: ${cases}, Per 10k: ${rate}</p>`
+                             <p>Population: ${r.pop}, Cases: ${cases}</p>
+                             <p> Per 10k residents: ${rate} (${percentage}%)</p>`
           properties.rate = rate
+          properties.percentage = percentage
           properties.pop = r.pop
         }
         return turf.point([r.Long_, r.Lat], properties)
@@ -62,10 +65,14 @@ export default {
             ['get', 'rate'],
             0,
             2, // rate per 10k
+            1.0,
+            7, // ..
             2.0,
-            6, // ..
+            15, // ..
+            3.0,
+            20,
             4.0,
-            10, // ..
+            30,
             5.0,
             100, // ..
             6.0,
