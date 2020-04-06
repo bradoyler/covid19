@@ -26,7 +26,7 @@ export default {
           const rate = Math.round(cases / (r.pop / 10000))
           const percentage = ((cases / r.pop) * 100).toFixed(1)
           properties.html = `<strong>${r.Admin2}, ${r.Province_State}</strong>
-                             <p>Population: ${r.pop}, Cases: ${cases}</p>
+                             <p>Cases: ${cases.toLocaleString()} / Population: ${r.pop.toLocaleString()}</p>
                              <p> Per 10k residents: ${rate} (${percentage}%)</p>`
           properties.rate = rate
           properties.percentage = percentage

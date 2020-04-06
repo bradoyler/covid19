@@ -2,7 +2,7 @@
   <div id="app">
   <div class="header">
     <h3 class="header-title">COVID-19 Confirmed cases (per capita)<br>
-       <small>Confirmed cases (U.S.): {{totalCases}} </small><br>
+       <small>Confirmed cases (U.S.): {{totalCases.toLocaleString()}} </small><br>
        <small style="font-size: x-small">updated: {{reportDate}}</small>
     </h3>
   </div>
@@ -29,7 +29,7 @@ export default {
       return reportCases.reduce((acc, curr) => Number(acc) + Number(curr))
     },
     loadData: function () {
-      Promise.all([`cases-us-${dataVersion}.json`, 'counties.json'].map(url => {
+      Promise.all([`cases-us-${dataVersion}.json`, 'counties-v2.json'].map(url => {
         return fetch(url).then(response => {
           return response.ok ? response.json() : Promise.reject(response.status)
         })
