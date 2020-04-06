@@ -11,10 +11,9 @@
 </template>
 
 <script>
-import { csvParse } from 'd3-dsv'
 import MainMap from './components/MainMap.vue'
-const dataVersion = '4.4.1'
-const reportDate = '4/4/20'
+const reportDate = '4/5/20'
+const dataVersion = reportDate.replace(/\//g, '.')
 
 export default {
   name: 'App',
@@ -26,14 +25,14 @@ export default {
   },
   methods: {
     getTotalCases: function () {
-      const reportCases = this.reports.map(r => r[this.reportDate])
+      const reportCases = this.reports.map(r => r.confirmed)
       return reportCases.reduce((acc, curr) => Number(acc) + Number(curr))
     },
     loadData: function () {
-      Promise.all([`cases-us-${dataVersion}.csv`, 'counties.csv'].map(url => {
+      Promise.all([`cases-us-${dataVersion}.json`, 'counties.json'].map(url => {
         return fetch(url).then(response => {
-          return response.ok ? response.text() : Promise.reject(response.status)
-        }).then(text => csvParse(text))
+          return response.ok ? response.json() : Promise.reject(response.status)
+        })
       })).then(datum => {
         const reports = datum[0]
         const counties = datum[1]

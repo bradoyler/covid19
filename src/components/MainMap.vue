@@ -18,9 +18,9 @@ export default {
     buildGeoJson: function () {
       const data = this.reports
       console.log('buildJson:', data.length, this.reportDate, data[9])
-      const reportDate = this.reportDate
+      // const reportDate = this.reportDate
       return turf.featureCollection(data.map(r => {
-        const cases = Math.round(Number(r[reportDate]))
+        const cases = Math.round(Number(r.confirmed))
         const properties = { cases, FIPS: r.FIPS, pop: 0, rate: 0, percentage: 0 }
         if (r.pop) {
           const rate = Math.round(cases / (r.pop / 10000))
@@ -72,7 +72,7 @@ export default {
             3.0,
             20,
             4.0,
-            30,
+            40,
             5.0,
             100, // ..
             6.0,
