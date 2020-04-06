@@ -7,16 +7,29 @@
 <script>
 /* globals mapboxgl */
 import * as turf from '@turf/turf'
+import { confirmedLayer, deathsLayer } from '../layers'
 
 export default {
   name: 'MainMap',
-  props: ['coords', 'reports', 'reportDate'],
+  data: function () {
+    return { map: null }
+  },
+  props: ['coords', 'reports', 'deathReports', 'reportDate', 'mapType'],
+  watch: {
+    mapType: function (newVal, oldVal) { // watch it
+      console.log('mapType changed: ', newVal, oldVal)
+      this.map.removeLayer(oldVal)
+      this.map.removeSource(oldVal)
+      this.addLayer(this.map, this.buildGeoJson())
+      this.addHover(this.map)
+    }
+  },
   methods: {
     setLocation: function (map, coords) {
       new mapboxgl.Marker().setLngLat(coords).addTo(map)
     },
     buildGeoJson: function () {
-      const data = this.reports
+      const data = this.mapType === 'deaths' ? this.deathReports : this.reports
       console.log('buildJson:', data.length, this.reportDate, data[9])
       // const reportDate = this.reportDate
       return turf.featureCollection(data.map(r => {
@@ -26,7 +39,7 @@ export default {
           const rate = Math.round(cases / (r.pop / 10000))
           const percentage = ((cases / r.pop) * 100).toFixed(1)
           properties.html = `<strong>${r.Admin2}, ${r.Province_State}</strong>
-                             <p>Cases: ${cases.toLocaleString()} / Population: ${r.pop.toLocaleString()}</p>
+                             <p>${this.mapType}: ${cases.toLocaleString()} / Population: ${r.pop.toLocaleString()}</p>
                              <p> Per 10k residents: ${rate} (${percentage}%)</p>`
           properties.rate = rate
           properties.percentage = percentage
@@ -38,55 +51,29 @@ export default {
     addHover: function (map) {
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false })
 
-      map.on('mouseenter', 'report', function (e) {
+      map.on('mouseenter', this.mapType, function (e) {
         map.getCanvas().style.cursor = 'pointer'
         const description = e.features[0].properties.html
         const coordinates = e.features[0].geometry.coordinates.slice()
         popup.setLngLat(coordinates).setHTML(description).addTo(map)
       })
-      map.on('mouseleave', 'report', function () {
+      map.on('mouseleave', this.mapType, function () {
         map.getCanvas().style.cursor = ''
         popup.remove()
       })
     },
     addLayer: function (map, geojson) {
-      map.addSource('report', { type: 'geojson', data: geojson })
+      map.addSource(this.mapType, { type: 'geojson', data: geojson })
 
-      map.addLayer({
-        id: 'report',
-        type: 'circle',
-        source: 'report',
-        paint: {
-          'circle-stroke-color': 'grey',
-          'circle-stroke-width': 1,
-          'circle-opacity': 1,
-          'circle-radius': [
-            'step',
-            ['get', 'rate'],
-            0,
-            2, // rate per 10k
-            1.0,
-            7, // ..
-            2.0,
-            15, // ..
-            3.0,
-            20,
-            4.0,
-            40,
-            5.0,
-            100, // ..
-            6.0,
-            200, // ..
-            10.0,
-            250, // ..
-            12.5
-          ],
-          'circle-color': 'rgb(165,15,21)'
-        }
-      })
+      let layer = confirmedLayer()
+      if (this.mapType === 'deaths') {
+        layer = deathsLayer()
+      }
+      map.addLayer(layer)
     }
   },
   mounted () {
+    console.log('mounted')
     mapboxgl.accessToken = window.mapbox_token
 
     const map = new mapboxgl.Map({
@@ -95,6 +82,7 @@ export default {
       center: [-95.830, 38.477],
       zoom: 3.5
     })
+    this.map = map
 
     // window.map = map // export to window
     const that = this

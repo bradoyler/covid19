@@ -20,10 +20,17 @@ const filePath = 'public/cases-us.csv'
 axios.get(confirmedUrl).then(res => fs.writeFileSync(filePath, res.data, 'utf-8'))
 
 const deathsFilePath = 'public/deaths-us.csv'
-axios.get(deathsUrl).then(res => fs.writeFileSync(deathsFilePath, res.data, 'utf-8'))
+axios.get(deathsUrl)
+  .then(res => fs.writeFileSync(deathsFilePath, res.data, 'utf-8'))
 
 const jsonFilePath = `public/cases-us-${dataVersion}.json`
 axios.get(confirmedUrl)
   .then(res => csvParse(res.data))
   .then(json => transformJson(json))
   .then(json => fs.writeFileSync(jsonFilePath, JSON.stringify(json), 'utf-8'))
+
+const jsonDeathsFilePath = `public/deaths-us-${dataVersion}.json`
+axios.get(deathsUrl)
+  .then(res => csvParse(res.data))
+  .then(json => transformJson(json))
+  .then(json => fs.writeFileSync(jsonDeathsFilePath, JSON.stringify(json), 'utf-8'))

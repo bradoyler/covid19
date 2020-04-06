@@ -1,13 +1,23 @@
 <template>
-  <div id="app">
+<div id="app">
   <div class="header">
-    <h3 class="header-title">COVID-19 Confirmed cases (per capita)<br>
-       <small>Confirmed cases (U.S.): {{totalCases.toLocaleString()}} </small><br>
-       <small style="font-size: x-small">updated: {{reportDate}}</small>
+    <h3 class="header-title">
+      <div class="mb1"> COVID-19 Reports - US Map</div>
+      <a v-on:click="loadConfirmed" v-bind:class="[mapType ==='confirmed' ? 'ba' : '']"
+      class="f6 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
+        Confirmed: {{totalCases.toLocaleString()}}
+      </a>
+      <a v-on:click="loadDeaths" v-bind:class="[mapType ==='deaths' ? 'ba' : '']"
+      class="f6 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#deaths">
+        Deaths: {{totalDeaths.toLocaleString()}}
+      </a>
     </h3>
   </div>
-    <MainMap v-if="reports.length" :reportDate="reportDate" :coords="coords" :reports="reports"></MainMap>
+    <MainMap v-if="reports.length" :mapType="mapType" :reportDate="reportDate" :coords="coords" :deathReports="deathReports" :reports="reports"></MainMap>
+  <div class="footer">
+    <small style="font-size: x-small">updated: {{reportDate}}</small>
   </div>
+</div>
 </template>
 
 <script>
@@ -24,40 +34,58 @@ export default {
     this.loadData()
   },
   methods: {
+    loadDeaths: function () {
+      this.mapType = 'deaths'
+    },
+    loadConfirmed: function () {
+      this.mapType = 'confirmed'
+    },
+    joinData: function (r, counties) {
+      const fips = Math.round(Number(r.FIPS))
+      const county = counties.find(c => fips === +`${c.STATE}${c.COUNTY}`)
+      if (county) {
+        r.pop = Number(county.POPESTIMATE2019)
+      }
+      return r
+    },
     getTotalCases: function () {
-      const reportCases = this.reports.map(r => r.confirmed)
-      return reportCases.reduce((acc, curr) => Number(acc) + Number(curr))
+      const data = this.reports.map(r => r.confirmed)
+      return data.reduce((acc, curr) => Number(acc) + Number(curr))
+    },
+    getTotalDeaths: function () {
+      const data = this.deathReports.map(r => r.confirmed)
+      return data.reduce((acc, curr) => Number(acc) + Number(curr))
     },
     loadData: function () {
-      Promise.all([`cases-us-${dataVersion}.json`, 'counties-v2.json'].map(url => {
+      const jsonFiles = [`cases-us-${dataVersion}.json`, `deaths-us-${dataVersion}.json`, 'counties-v2.json']
+      Promise.all(jsonFiles.map(url => {
         return fetch(url).then(response => {
           return response.ok ? response.json() : Promise.reject(response.status)
         })
-      })).then(datum => {
-        const reports = datum[0]
-        const counties = datum[1]
-        this.reports = reports.map(r => {
-          const fips = Math.round(Number(r.FIPS))
-          const county = counties.find(c => fips === +`${c.STATE}${c.COUNTY}`)
-          if (county) {
-            r.pop = Number(county.POPESTIMATE2019)
-          }
-          return r
-        })
-        console.log('>>>', this.reports.length)
+      })).then(responses => {
+        const reports = responses[0]
+        const deathReports = responses[1]
+        const counties = responses[2]
+        this.deathReports = deathReports.map(r => this.joinData(r, counties))
+        this.reports = reports.map(r => this.joinData(r, counties))
+        console.log('>>> reports:', this.reports.length, this.deathReports.length)
         this.totalCases = this.getTotalCases()
+        this.totalDeaths = this.getTotalDeaths()
       })
     }
   },
   data: function () {
     return {
+      mapType: 'confirmed',
       recovered: 0,
       totalCases: 0,
+      totalDeaths: 0,
       reportDate: reportDate,
       location: '',
       coords: '', // [-74.8477, 40.247]
       counties: [],
-      reports: []
+      reports: [],
+      deathReports: []
     }
   }
 }
@@ -75,10 +103,23 @@ export default {
 
 .header {
   position: fixed;
-  top: 8px;
+  top: 0;
   z-index: 9999;
   text-align: center;
   width: 100%;
+}
+
+.footer {
+  padding-bottom: 5px;
+  position: fixed;
+  bottom: 0;
+  z-index: 9999;
+  text-align: center;
+  width: 100%;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  color: antiquewhite;
+  background-color: black;
 }
 
 .header-title {
