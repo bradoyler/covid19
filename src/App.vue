@@ -3,13 +3,17 @@
   <div class="header">
     <h3 class="header-title">
       <div class="mb1"> COVID-19 Reports - US Map</div>
-      <a v-on:click="loadConfirmed" v-bind:class="[mapType ==='confirmed' ? 'ba' : '']"
-      class="f6 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
-        Confirmed: {{totalCases.toLocaleString()}}
+      <a v-on:click="loadMapLayer('confirmed')" v-bind:class="[mapType ==='confirmed' ? 'ba' : '']"
+      class="f7 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
+        Confirmed {{totalCases.toLocaleString()}}
       </a>
-      <a v-on:click="loadDeaths" v-bind:class="[mapType ==='deaths' ? 'ba' : '']"
-      class="f6 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#deaths">
-        Deaths: {{totalDeaths.toLocaleString()}}
+      <a v-on:click="loadMapLayer('confirmed-pc')" v-bind:class="[mapType ==='confirmed-pc' ? 'ba' : '']"
+      class="f7 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
+        Per Capita
+      </a>
+      <a v-on:click="loadMapLayer('deaths')" v-bind:class="[mapType ==='deaths' ? 'ba' : '']"
+      class="f7 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#deaths">
+        Deaths {{totalDeaths.toLocaleString()}}
       </a>
     </h3>
   </div>
@@ -34,11 +38,8 @@ export default {
     this.loadData()
   },
   methods: {
-    loadDeaths: function () {
-      this.mapType = 'deaths'
-    },
-    loadConfirmed: function () {
-      this.mapType = 'confirmed'
+    loadMapLayer: function (name) {
+      this.mapType = name
     },
     joinData: function (r, counties) {
       const fips = Math.round(Number(r.FIPS))

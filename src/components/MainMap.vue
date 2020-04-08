@@ -7,7 +7,7 @@
 <script>
 /* globals mapboxgl */
 import * as turf from '@turf/turf'
-import { confirmedLayer, deathsLayer } from '../layers'
+import { confirmedPCLayer, confirmedLayer, deathsLayer } from '../layers'
 
 export default {
   name: 'MainMap',
@@ -68,6 +68,8 @@ export default {
       let layer = confirmedLayer()
       if (this.mapType === 'deaths') {
         layer = deathsLayer()
+      } else if (this.mapType === 'confirmed-pc') {
+        layer = confirmedPCLayer()
       }
       map.addLayer(layer)
     }
