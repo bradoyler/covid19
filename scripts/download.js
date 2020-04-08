@@ -8,6 +8,8 @@ const deathsUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/mas
 const reportDate = process.env.VUE_APP_REPORT_PATH
 const dataVersion = reportDate.replace(/\//g, '.')
 
+console.log('downloading', reportDate, '->', dataVersion)
+
 function transformJson (json) {
   return json.map(i => {
     // eslint-disable-next-line camelcase
