@@ -22,7 +22,7 @@
 
 <script>
 import MainMap from './components/MainMap.vue'
-const reportDate = '4/5/20'
+const reportDate = process.env.VUE_APP_REPORT_PATH
 const dataVersion = reportDate.replace(/\//g, '.')
 
 export default {

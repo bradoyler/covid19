@@ -1,10 +1,11 @@
+require('dotenv').config()
 const fs = require('fs')
 const axios = require('axios')
 const { csvParse } = require('d3-dsv')
 
 const confirmedUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'
 const deathsUrl = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv'
-const reportDate = '4/5/20'
+const reportDate = process.env.VUE_APP_REPORT_PATH
 const dataVersion = reportDate.replace(/\//g, '.')
 
 function transformJson (json) {
