@@ -5,7 +5,7 @@
       <div class="mb1"> COVID-19 Reports - US Map</div>
       <a v-on:click="loadMapLayer('confirmed')" v-bind:class="[mapType ==='confirmed' ? 'ba' : '']"
       class="f7 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
-        Confirmed {{totalCases.toLocaleString()}}
+        Cases {{totalCases.toLocaleString()}}
       </a>
       <a v-on:click="loadMapLayer('confirmed-pc')" v-bind:class="[mapType ==='confirmed-pc' ? 'ba' : '']"
       class="f7 link dim br2 ph3 pv2 mb2 dib white bg-black" href="#confirmed">
@@ -58,7 +58,7 @@ export default {
       return data.reduce((acc, curr) => Number(acc) + Number(curr))
     },
     loadData: function () {
-      const jsonFiles = [`cases-us-${dataVersion}.json`, `deaths-us-${dataVersion}.json`, 'counties-v2.json']
+      const jsonFiles = [`cases2-us-${dataVersion}.json`, `deaths-us-${dataVersion}.json`, 'counties-v2.json']
       Promise.all(jsonFiles.map(url => {
         return fetch(url).then(response => {
           return response.ok ? response.json() : Promise.reject(response.status)

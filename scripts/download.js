@@ -26,7 +26,7 @@ const deathsFilePath = 'public/deaths-us.csv'
 axios.get(deathsUrl)
   .then(res => fs.writeFileSync(deathsFilePath, res.data, 'utf-8'))
 
-const jsonFilePath = `public/cases-us-${dataVersion}.json`
+const jsonFilePath = `public/cases2-us-${dataVersion}.json`
 axios.get(confirmedUrl)
   .then(res => csvParse(res.data))
   .then(json => transformJson(json))
