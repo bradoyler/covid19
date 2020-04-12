@@ -19,7 +19,10 @@
   </div>
     <MainMap v-if="reports.length" :mapType="mapType" :reportDate="reportDate" :coords="coords" :deathReports="deathReports" :reports="reports"></MainMap>
   <div class="footer">
-    <small style="font-size: x-small">updated: {{reportDate}}</small>
+    <small style="">
+      <a href="https://github.com/bradoyler/covid19">Source code & Data</a>
+      <span style="font-size: 0.7rem"> updated: {{reportDate}}</span>
+    </small>
   </div>
 </div>
 </template>

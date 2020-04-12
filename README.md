@@ -1,4 +1,9 @@
-# covid19
+# Covid-19 maps
+
+This projects uses:
+- [Vue.js](https://vuejs.org)
+- [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/api/)
+- Data from [JHU CSSE](https://github.com/CSSEGISandData/COVID-19) and [census.gov](https://www.census.gov/developers/)
 
 ## Project setup
 ```
