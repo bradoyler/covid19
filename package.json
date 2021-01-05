@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@turf/turf": "^5.1.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.4",
     "d3-dsv": "^1.2.0",
     "s3-deploy": "^1.4.0",
